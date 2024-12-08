@@ -1,0 +1,50 @@
+#!/bin/python3
+
+import os
+
+#
+# Complete the 'numCells' function below.
+#
+# The function is expected to return an INTEGER.
+# The function accepts 2D_INTEGER_ARRAY grid as parameter.
+#
+
+def numCells(grid):
+    # Count the number of "special cells" in the grid
+    def is_special_cell(row, col):
+        # Get the value of the current cell
+        cell_value = grid[row][col]
+        # Check all 8 possible neighbors
+        directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+        for dr, dc in directions:
+            nr, nc = row + dr, col + dc
+            # If neighbor is within bounds and greater or equal to the current cell, return False
+            if 0 <= nr < len(grid) and 0 <= nc < len(grid[0]) and grid[nr][nc] >= cell_value:
+                return False
+        return True
+
+    special_cells = 0
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if is_special_cell(i, j):
+                special_cells += 1
+
+    return special_cells
+
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    grid_rows = int(input().strip())
+    grid_columns = int(input().strip())
+
+    grid = []
+
+    for _ in range(grid_rows):
+        grid.append(list(map(int, input().rstrip().split())))
+
+    result = numCells(grid)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
